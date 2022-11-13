@@ -46,7 +46,6 @@ void
 read_file_tail (char *filename, int line)
 {
         int lim, i, c, ibuf;
-        int status;
         char *buf;
         FILE *fp;
 
@@ -59,10 +58,11 @@ read_file_tail (char *filename, int line)
                 buf[ibuf++] = c;
                 if (c == '\n')
                         ++i;
-                status = fseek (fp, -2, SEEK_CUR);
-                if (status == -1)
+                if (fseek (fp, -2, SEEK_CUR) == -1) {
+                        buf[ibuf++] = '\n'; // make sure every line end with '\n'
                         break;
+                }
         }
         strrev (buf);
-        printf ("%s\n", buf);
+        printf ("%s", buf);
 }
