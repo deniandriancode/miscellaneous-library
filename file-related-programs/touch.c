@@ -12,15 +12,18 @@ main (int argc, char *argv[])
                 return 1;
         }
 
-        index = 1;
-        while (--argc >= 0) {
-                char *filename = *(argv + index);
+        while (--argc > 0 && *(argv++)) {
+                char *filename = *argv;
+
+                if (fopen (filename, "r") != NULL) {
+                        continue;
+                }
                 if (filename) {
                         fp = fopen (filename, "w");
                         fclose (fp);
-                        ++index;
                 }
         }
 
         return 0;
 }
+
