@@ -169,7 +169,7 @@ lsh_launch (char **args)
     pid = fork ();
     if (pid == 0) {
         // child process
-        if (execvp (args[0], args)) { // if it returns anything, an error is occurred
+        if (execvp (args[0], args)) { // if it returns anything, an error has occurred
             perror (PROGNAME);
         }
         exit (EXIT_FAILURE);
