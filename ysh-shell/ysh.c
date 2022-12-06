@@ -1,12 +1,12 @@
 /*
  * TODO: create map for builtin command
- * TODO: command insertion (left-right move cursor)
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pwd.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -69,18 +69,21 @@ char*
 prompt (void)
 {
 	char *cwd, *buf;
+	char *host;
 	char *prm;
 	size_t cwdsize;
 
 	cwdsize = YSH_LINE_BUFSIZE;
-	prm = buf = malloc (cwdsize * sizeof (size_t));
-	if (!prm || !buf) {
+	host = prm = buf = malloc (cwdsize * sizeof (size_t));
+	if (!prm || !buf || !host) {
 		fprintf (stderr, "%s: allocation error\n", PROGNAME);
 		exit (EXIT_FAILURE);
 	}
 	cwd = getcwd (buf, cwdsize);
+	gethostname (host, cwdsize);
 
-	sprintf (prm, "\033[32m%s\033[m\n$ ", cwd);
+	/* sprintf (prm, "\033[32m%s\033[m\n$ ", cwd); */
+	sprintf (prm, "%s\n$ ", host);
 	return prm;
 }
 
@@ -93,7 +96,7 @@ ysh_read_line (void)
 	char *line;
 	char *prompt_user;
 
-	signal (SIGINT, SIG_IGN);
+	/* signal (SIGINT, SIG_IGN); */
 	prompt_user = prompt ();
 	line = readline (prompt_user);
 
